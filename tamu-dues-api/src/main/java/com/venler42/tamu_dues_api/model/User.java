@@ -1,15 +1,48 @@
 package com.venler42.tamu_dues_api.model;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "Users", schema = "TAMUDues")
 public class User {
-    private String name;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // identity says don't try to manage, let database generate
+                                                        // value using auto_increment
+    private Long id;
+    private String username;
     private String password;
 
-    public String getName() {
-        return name;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true) // delete from database if parent
+                                                                                   // doesn't reference it
+    private List<Assignment> assignments;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Section> sections;
+
+    public User() {
+
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

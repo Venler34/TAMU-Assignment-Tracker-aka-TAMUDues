@@ -1,7 +1,5 @@
 package com.venler42.tamu_dues_api.model;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -12,15 +10,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Assignments", schema = "TAMUDues")
-public class Assignment {
+@Table(name = "Sections", schema = "TAMUDues")
+public class Section {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String description;
-    private LocalDateTime dueDate;
+    private String color;
 
     @ManyToOne()
     @JoinColumn(name = "userId", nullable = false) // based on sql
@@ -35,20 +32,12 @@ public class Assignment {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getColor() {
+        return color;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDateTime getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(LocalDateTime dueDate) {
-        this.dueDate = dueDate;
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public User getUser() {
