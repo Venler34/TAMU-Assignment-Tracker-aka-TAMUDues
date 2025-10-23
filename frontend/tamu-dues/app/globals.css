@@ -3,6 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --color1: #2f5f42;
 }
 
 @theme inline {
@@ -30,11 +31,11 @@ body {
   align-items: center;
   padding: 0.5rem 1rem;
   justify-content: space-between;
-  background-color: grey;
+  background-color: #5eec97;
 }
 
 .signIn {
-  background-color: #70ffa9;
+  background-color: var(--color1);
   padding: 0.5rem;
   border-radius: 10px;
   color: white;
@@ -43,10 +44,20 @@ body {
 .signInForm {
   position: absolute;
   right: 0;
-  background: #28a745;
+  background-color: var(--color1);
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 4px;
+}
+
+.signInForm button {
+  background-color: #0e9845;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+input:focus {
+  outline: none;
 }
 
 .signInBox {
