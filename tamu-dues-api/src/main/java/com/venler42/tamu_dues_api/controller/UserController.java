@@ -2,31 +2,32 @@ package com.venler42.tamu_dues_api.controller;
 
 import java.util.Optional;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+// import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import com.venler42.tamu_dues_api.model.User;
-
 import com.venler42.tamu_dues_api.repository.UserRepository;
+import com.venler42.tamu_dues_api.service.UserService;
 
 @RestController
 @RequestMapping("/v1/users")
 public class UserController {
+    private final UserService userService;
     private final UserRepository userRepo;
 
-    public UserController(UserRepository userRepo) {
+    public UserController(UserService userService, UserRepository userRepo) {
+        this.userService = userService;
         this.userRepo = userRepo;
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllUsers() {
+        return ResponseEntity.ok().build();
     }
 
     /* User Endpoints */
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUser(@PathVariable long userId) {
+    public ResponseEntity<User> getUser(@PathVariable Integer userId) {
         Optional<User> user = userRepo.findById(userId);
 
         if (user.isPresent()) {
@@ -38,34 +39,18 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> addUser(@RequestBody User user) {
-        return ResponseEntity.status(201).body(userRepo.save(user));
+        return ResponseEntity.status(201).body(userService.createUser(user));
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<User> updateUser(@PathVariable long userId, @RequestBody User userDetails) {
-        // returns optional (may contain or not) (let's you transform value within if
-        // exists without checking if present, wraps in new optional or remains empty
-        // optional)
-        return userRepo.findById(userId)
-                .map(user -> {
-                    user.setUsername(userDetails.getUsername());
-                    user.setPassword(userDetails.getPassword());
-
-                    User updatedUser = userRepo.save(user);
-                    return ResponseEntity.ok(updatedUser);
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build()); // generates fallback value or retrieves value
-                                                                     // inside optional (supplier function is called)
+    public ResponseEntity<User> updateUser(@PathVariable Integer userId, @RequestBody User userDetails) {
+        return ResponseEntity.ok().body(userService.updateUser(userId, userDetails));
     }
 
-    @DeleteMapping("{userId}")
-    public ResponseEntity<User> deleteUser(@PathVariable long userId) {
-        if (userRepo.existsById(userId)) { // SELECT 1 FROM table where id = ?
-            userRepo.deleteById(userId); // may throw exception if id doesn't exist
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<User> deleteUser(@PathVariable Integer userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.status(204).build();
     }
 
 }

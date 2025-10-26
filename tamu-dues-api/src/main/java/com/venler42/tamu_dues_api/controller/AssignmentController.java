@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.venler42.tamu_dues_api.repository.AssignmentRepository;
-import com.venler42.tamu_dues_api.repository.UserRepository;
-
+import com.venler42.tamu_dues_api.service.AssignmentService;
+import com.venler42.tamu_dues_api.service.UserService;
 import com.venler42.tamu_dues_api.model.Assignment;
 import com.venler42.tamu_dues_api.model.User;
 
@@ -24,29 +23,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/v1/users/{userId}/assignments")
 public class AssignmentController {
-    private final AssignmentRepository assignmentRepo;
-    private final UserRepository userRepo;
 
-    public AssignmentController(AssignmentRepository assignmentRepo,
-            UserRepository userRepo) {
-        this.assignmentRepo = assignmentRepo;
-        this.userRepo = userRepo;
+    private final AssignmentService assignmentService;
+    private final UserService userService;
+
+    public AssignmentController(AssignmentService assignmentService, UserService userService) {
+        this.assignmentService = assignmentService;
+        this.userService = userService;
     }
 
     @GetMapping
-    public List<Assignment> getAllAssignments(@PathVariable Long userId) {
-        return assignmentRepo.findByUserId(userId);
+    public List<Assignment> getAllAssignments(@PathVariable Integer userId) {
+        return assignmentService.findAllAssignments(userId);
     }
 
     @PostMapping
-    public ResponseEntity<Assignment> createAssignment(@PathVariable Long userId,
+    public ResponseEntity<Assignment> createAssignment(@PathVariable Integer userId,
             @RequestBody Assignment assignment) {
-        Optional<User> user = userRepo.findById(userId);
+        Optional<User> user = userService.findUserById(userId);
 
         if (user.isPresent()) {
             User actualUser = user.get();
-            assignment.setUser(actualUser);
-            Assignment savedAssignment = assignmentRepo.save(assignment);
+            Assignment savedAssignment = assignmentService.createAssignment(actualUser, assignment);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedAssignment);
         } else {
             return ResponseEntity.notFound().build(); // couldn't find user
@@ -54,9 +52,9 @@ public class AssignmentController {
     }
 
     @GetMapping("/{assignmentId}")
-    public ResponseEntity<Assignment> getAssignment(@PathVariable Long userId,
-            @PathVariable Long assignmentId) {
-        Optional<Assignment> assignment = assignmentRepo.findByIdAndUserId(assignmentId, userId);
+    public ResponseEntity<Assignment> getAssignment(@PathVariable Integer userId,
+            @PathVariable Integer assignmentId) {
+        Optional<Assignment> assignment = assignmentService.findAssignmentByUserAndId(assignmentId, userId);
         if (assignment.isPresent()) {
             return ResponseEntity.ok().body(assignment.get());
         } else {
@@ -65,32 +63,19 @@ public class AssignmentController {
     }
 
     @PutMapping("/{assignmentId}")
-    public ResponseEntity<Assignment> updateAssignment(@PathVariable Long userId,
-            @PathVariable Long assignmentId,
+    public ResponseEntity<Assignment> updateAssignment(@PathVariable Integer userId,
+            @PathVariable Integer assignmentId,
             @RequestBody Assignment assignmentRequest) {
-        if (!userRepo.existsById(userId)) {
-            return ResponseEntity.notFound().build();
-        }
 
-        return assignmentRepo.findByIdAndUserId(assignmentId, userId)
-                .map(assignment -> {
-                    assignment.setName(assignmentRequest.getName());
-                    assignment.setDescription(assignmentRequest.getDescription());
-                    assignment.setDueDate(assignmentRequest.getDueDate());
-                    // wouldn't transfer users
-
-                    return ResponseEntity.ok().body(assignmentRepo.save(assignment));
-                }).orElseGet(() -> ResponseEntity.notFound().build());
+        // TODO - work on security of this endpoint in case user doesn't exist stuff
+        // like that
+        return ResponseEntity.ok().body(assignmentService.updateAssignment(assignmentId, assignmentRequest));
     }
 
     @DeleteMapping("/{assignmentId}")
-    public ResponseEntity<?> deleteAssignment(@PathVariable Long userId,
-            @PathVariable Long assignmentId) {
-        return assignmentRepo.findByIdAndUserId(assignmentId, userId)
-                .map(assignment -> {
-                    assignmentRepo.delete(assignment);
-                    return ResponseEntity.ok().build();
-                }).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<?> deleteAssignment(@PathVariable Integer userId,
+            @PathVariable Integer assignmentId) {
+        assignmentService.deleteAssignment(assignmentId);
+        return ResponseEntity.status(204).build();
     }
-
 }

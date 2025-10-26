@@ -1,7 +1,8 @@
 package com.venler42.tamu_dues_api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,12 +16,13 @@ public class Section {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private String name;
     private String color;
 
     @ManyToOne()
     @JoinColumn(name = "userId", nullable = false) // based on sql
+    @JsonIgnore
     private User user;
 
     // Getters and setters needed to update requests

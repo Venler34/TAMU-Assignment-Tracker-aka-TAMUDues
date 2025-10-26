@@ -2,6 +2,8 @@ package com.venler42.tamu_dues_api.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,13 +18,14 @@ public class Assignment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private String name;
     private String description;
     private LocalDateTime dueDate;
 
     @ManyToOne()
     @JoinColumn(name = "userId", nullable = false) // based on sql
+    @JsonIgnore
     private User user;
 
     // Getters and setters needed to update requests
