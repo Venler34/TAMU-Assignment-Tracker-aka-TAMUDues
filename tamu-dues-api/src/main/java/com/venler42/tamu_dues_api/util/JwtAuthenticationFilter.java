@@ -28,6 +28,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
+        String path = request.getRequestURI(); // skip if logging in or registering
+        if (path.startsWith("/v1/auth")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String token = parseJwt(request);
 
         if (token != null && jwtUtils.validateToken(token)) {
@@ -36,7 +43,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // Shouldn't be an issue right now, but note that this is hardcoded for the
             // /v1/user paths
-            String path = request.getRequestURI();
             Integer pathId = Integer.valueOf(path.split("/")[3]);
 
             if (!user.getId().equals(pathId)) {
