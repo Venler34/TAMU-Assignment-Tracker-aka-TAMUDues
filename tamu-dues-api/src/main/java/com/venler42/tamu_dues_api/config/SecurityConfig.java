@@ -31,15 +31,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizedRequests -> authorizedRequests
                         .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated());
-        // .formLogin(form -> form
-        // .loginPage("/auth/login")
-        // .loginProcessingUrl("/auth/login")
-        // .usernameParameter("username")
-        // .passwordParameter("password")
-        // .defaultSuccessUrl("/v1/users", true)
-        // .permitAll())
-        // .logout(logout -> logout.permitAll());
-        // .userDetailsService(myUserDetailsService);
+
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

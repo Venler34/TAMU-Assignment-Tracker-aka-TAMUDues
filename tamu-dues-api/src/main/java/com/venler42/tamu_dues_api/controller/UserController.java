@@ -1,12 +1,18 @@
 package com.venler42.tamu_dues_api.controller;
 
 import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.venler42.tamu_dues_api.model.User;
 import com.venler42.tamu_dues_api.repository.UserRepository;
 import com.venler42.tamu_dues_api.service.UserService;
+
+import org.springframework.security.core.Authentication;
 
 @RestController
 @RequestMapping("/v1/users")

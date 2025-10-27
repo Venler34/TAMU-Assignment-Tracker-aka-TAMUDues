@@ -13,6 +13,10 @@ public class CustomUserDetails implements UserDetails {
         this.user = user;
     }
 
+    public Integer getId() {
+        return user.getId();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // roles that the user has, but there are no roles right now
