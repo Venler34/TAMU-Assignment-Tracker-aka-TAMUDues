@@ -7,19 +7,14 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.venler42.tamu_dues_api.model.CustomUserDetails;
 import com.venler42.tamu_dues_api.service.MyUserDetailsService;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import org.springframework.security.core.Authentication;
 
 /* For generating, parsing, and validating JWTs */
 
