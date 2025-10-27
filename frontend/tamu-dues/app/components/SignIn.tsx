@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 export default function Signin() {
     const router = useRouter();
-    const loginURL = "http://localhost:8080/v1/login";
+    const loginURL = "http://localhost:8080/v1/auth/login";
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -21,8 +21,11 @@ export default function Signin() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ "username": username, "password": password }),
             });
+
+            console.log("Running with")
+
 
             if (!res.ok) {
                 const err = await res.json();
@@ -31,7 +34,8 @@ export default function Signin() {
             }
 
             const data = await res.json();
-            localStorage.setItem("authToken", data.token);
+            console.log("Token ", data.token);
+            localStorage.setItem("authToken", data.token); // store jwt token
 
             router.push("/dashboard");
         } 
