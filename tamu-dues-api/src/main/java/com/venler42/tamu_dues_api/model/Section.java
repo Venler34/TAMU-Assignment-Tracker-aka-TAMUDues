@@ -1,5 +1,6 @@
 package com.venler42.tamu_dues_api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -22,7 +23,7 @@ public class Section {
 
     @ManyToOne()
     @JoinColumn(name = "userId", nullable = false) // based on sql
-    @JsonIgnore
+    @JsonBackReference
     private User user;
 
     // Getters and setters needed to update requests

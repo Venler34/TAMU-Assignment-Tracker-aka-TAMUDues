@@ -2,7 +2,7 @@ package com.venler42.tamu_dues_api.model;
 
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,7 +25,7 @@ public class Assignment {
 
     @ManyToOne()
     @JoinColumn(name = "userId", nullable = false) // based on sql
-    @JsonIgnore
+    @JsonBackReference
     private User user;
 
     // Getters and setters needed to update requests

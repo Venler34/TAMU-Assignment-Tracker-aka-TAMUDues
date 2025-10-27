@@ -1,10 +1,16 @@
 package com.venler42.tamu_dues_api.service;
 
-// import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.venler42.tamu_dues_api.model.LoginRequest;
+import com.venler42.tamu_dues_api.model.TokenResponse;
 import com.venler42.tamu_dues_api.model.User;
 import com.venler42.tamu_dues_api.repository.UserRepository;
+import com.venler42.tamu_dues_api.util.JWTUtil;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,29 +18,44 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
-    // private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepo;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-        // this.passwordEncoder = passwordEncoder;
+    private final JWTUtil jwtUtil;
+
+    public UserService(UserRepository userRepo, PasswordEncoder passwordEncoder, JWTUtil jwtUtil) {
+        this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+    }
+
+    public TokenResponse login(LoginRequest loginRequest) {
+        User user = userRepo.findByUsername(loginRequest.getUsername())
+                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
+
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid username or password");
+        }
+
+        String token = jwtUtil.generateToken(user.getId().toString()); // or username
+        return new TokenResponse(token);
     }
 
     public User createUser(User user) {
-        // user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepo.save(user);
     }
 
     public Optional<User> findUserById(Integer id) {
-        return userRepository.findById(id);
+        return userRepo.findById(id);
     }
 
     public List<User> findAllUsers() {
-        return userRepository.findAll();
+        return userRepo.findAll();
     }
 
     public User updateUser(Integer id, User updatedUser) {
-        return userRepository.findById(id)
+        return userRepo.findById(id)
                 .map(existingUser -> {
                     if (updatedUser.getUsername() != null)
                         existingUser.setUsername(updatedUser.getUsername());
@@ -42,19 +63,19 @@ public class UserService {
                             !updatedUser.getPassword().isBlank()) {
                         // existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
                     }
-                    return userRepository.save(existingUser);
+                    return userRepo.save(existingUser);
                 })
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
     }
 
     public void deleteUser(Integer id) {
-        if (!userRepository.existsById(id)) {
+        if (!userRepo.existsById(id)) {
             throw new RuntimeException("User not found with ID: " + id);
         }
-        userRepository.deleteById(id);
+        userRepo.deleteById(id);
     }
 
     public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userRepo.findByUsername(username);
     }
 }

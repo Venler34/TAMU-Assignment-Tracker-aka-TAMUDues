@@ -14,10 +14,7 @@ import jakarta.persistence.Table;
 // import org.springframework.security.core.GrantedAuthority;
 // import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.util.Collection;
-import java.util.Collections;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "Users", schema = "TAMUDues")
@@ -31,12 +28,12 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true) // delete from database if parent
-                                                                                   // doesn't reference it
-    @JsonIgnore // avoid infinite recuriosn because references
+    // doesn't reference it
+    @JsonManagedReference // avoid infinite recuriosn because references
     private List<Assignment> assignments;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore // doesn't include in response
+    @JsonManagedReference
     private List<Section> sections;
 
     public User() {
@@ -48,30 +45,13 @@ public class User {
         this.password = password;
     }
 
-    // @Override
-    // public Collection<? extends GrantedAuthority> getAuthorities() {
-    // return Collections.emptyList();
-    // }
+    public Integer getId() {
+        return this.id;
+    }
 
-    // @Override
-    // public boolean isAccountNonExpired() {
-    // return true;
-    // }
-
-    // @Override
-    // public boolean isAccountNonLocked() {
-    // return true;
-    // }
-
-    // @Override
-    // public boolean isCredentialsNonExpired() {
-    // return true;
-    // }
-
-    // @Override
-    // public boolean isEnabled() {
-    // return true;
-    // }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
