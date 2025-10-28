@@ -7,8 +7,7 @@ export default function Dashboard() {
 
     useEffect(() => {
         const fetchData = async () => {
-            // may refactor so includes id of person
-            const url = "http://localhost:8080/v1/users/8";
+            const url = "http://localhost:8080/v1/users";
             const token = localStorage.getItem("authToken");
             const res = await fetch(url, {
                 method: "GET",

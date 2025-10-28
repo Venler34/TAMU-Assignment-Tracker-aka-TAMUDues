@@ -26,7 +26,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.navbar {
+/* .navbar {
   display: flex;
   align-items: center;
   padding: 0.5rem 1rem;
@@ -68,9 +68,9 @@ input:focus {
   display: absolute;
   top: 50%;
   left: 50%;
-  /* transform: translate(-50%, -50%); */
+  transform: translate(-50%, -50%); 
 }
 
 .HomePage {
   display: relative;
-}
+} */
