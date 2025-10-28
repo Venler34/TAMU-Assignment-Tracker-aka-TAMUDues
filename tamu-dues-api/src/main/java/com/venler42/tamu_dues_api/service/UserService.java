@@ -58,7 +58,7 @@ public class UserService {
                         existingUser.setUsername(updatedUser.getUsername());
                     if (updatedUser.getPassword() != null &&
                             !updatedUser.getPassword().isBlank()) {
-                        // existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+                        existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
                     }
                     return userRepo.save(existingUser);
                 })

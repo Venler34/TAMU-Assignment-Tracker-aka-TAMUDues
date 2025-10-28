@@ -5,9 +5,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.venler42.tamu_dues_api.model.CustomUserDetails;
-import com.venler42.tamu_dues_api.model.User;
-
 import org.springframework.stereotype.Component;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -39,16 +36,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token != null && jwtUtils.validateToken(token)) {
             UsernamePasswordAuthenticationToken authentication = jwtUtils.getAuthentication(token);
-            CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-
-            // Shouldn't be an issue right now, but note that this is hardcoded for the
-            // /v1/user paths
-            Integer pathId = Integer.valueOf(path.split("/")[3]);
-
-            if (!user.getId().equals(pathId)) {
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                return;
-            }
 
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

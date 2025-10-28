@@ -1,5 +1,6 @@
 package com.venler42.tamu_dues_api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.security.core.Authentication;
 import com.venler42.tamu_dues_api.service.AssignmentService;
 import com.venler42.tamu_dues_api.service.UserService;
 import com.venler42.tamu_dues_api.model.Assignment;
@@ -21,7 +23,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/v1/users/{userId}/assignments")
+@RequestMapping("/v1/users/assignments")
 public class AssignmentController {
 
     private final AssignmentService assignmentService;
@@ -33,14 +35,22 @@ public class AssignmentController {
     }
 
     @GetMapping
-    public List<Assignment> getAllAssignments(@PathVariable Integer userId) {
-        return assignmentService.findAllAssignments(userId);
+    public List<Assignment> getAllAssignments(Authentication authentication) {
+        String username = authentication.getName();
+        Optional<User> user = userService.findByUsername(username);
+
+        if (!user.isPresent()) {
+            return new ArrayList<>();
+        }
+
+        return assignmentService.findAllAssignments(user.get().getId());
     }
 
     @PostMapping
-    public ResponseEntity<Assignment> createAssignment(@PathVariable Integer userId,
+    public ResponseEntity<Assignment> createAssignment(Authentication authentication,
             @RequestBody Assignment assignment) {
-        Optional<User> user = userService.findUserById(userId);
+        String username = authentication.getName();
+        Optional<User> user = userService.findByUsername(username);
 
         if (user.isPresent()) {
             User actualUser = user.get();
@@ -52,9 +62,15 @@ public class AssignmentController {
     }
 
     @GetMapping("/{assignmentId}")
-    public ResponseEntity<Assignment> getAssignment(@PathVariable Integer userId,
-            @PathVariable Integer assignmentId) {
-        Optional<Assignment> assignment = assignmentService.findAssignmentByUserAndId(assignmentId, userId);
+    public ResponseEntity<Assignment> getAssignment(Authentication authentication, @PathVariable Integer assignmentId) {
+        String username = authentication.getName();
+        Optional<User> user = userService.findByUsername(username);
+
+        if (!user.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Optional<Assignment> assignment = assignmentService.findAssignmentByUserAndId(assignmentId, user.get().getId());
         if (assignment.isPresent()) {
             return ResponseEntity.ok().body(assignment.get());
         } else {
@@ -63,18 +79,41 @@ public class AssignmentController {
     }
 
     @PutMapping("/{assignmentId}")
-    public ResponseEntity<Assignment> updateAssignment(@PathVariable Integer userId,
+    public ResponseEntity<Assignment> updateAssignment(Authentication authentication,
             @PathVariable Integer assignmentId,
             @RequestBody Assignment assignmentRequest) {
 
-        // TODO - work on security of this endpoint in case user doesn't exist stuff
-        // like that
+        String username = authentication.getName();
+        Optional<User> user = userService.findByUsername(username);
+
+        if (!user.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Optional<Assignment> assignment = assignmentService.findAssignmentByUserAndId(assignmentId, user.get().getId());
+        if (!assignment.isPresent()) {
+            return ResponseEntity.notFound().build(); // ensures user has this assignment
+        }
+
         return ResponseEntity.ok().body(assignmentService.updateAssignment(assignmentId, assignmentRequest));
     }
 
     @DeleteMapping("/{assignmentId}")
-    public ResponseEntity<?> deleteAssignment(@PathVariable Integer userId,
+    public ResponseEntity<?> deleteAssignment(Authentication authentication,
             @PathVariable Integer assignmentId) {
+
+        String username = authentication.getName();
+        Optional<User> user = userService.findByUsername(username);
+
+        if (!user.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Optional<Assignment> assignment = assignmentService.findAssignmentByUserAndId(assignmentId, user.get().getId());
+        if (!assignment.isPresent()) {
+            return ResponseEntity.notFound().build(); // ensures user has this assignment
+        }
+
         assignmentService.deleteAssignment(assignmentId);
         return ResponseEntity.status(204).build();
     }

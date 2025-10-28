@@ -60,4 +60,8 @@ public class Assignment {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public Integer getId() { // need getter so it gets returned
+        return this.id;
+    }
 }
