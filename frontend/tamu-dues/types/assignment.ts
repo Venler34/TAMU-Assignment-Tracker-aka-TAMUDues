@@ -1,8 +1,8 @@
 export interface Assignment {
-    id: string;
+    id?: string;
     name: string;
     dueDate: string; // ISO date
-    status: "complete" | "incomplete";
+    status: "COMPLETE" | "INCOMPLETE";
     description?: string;
-    priority: "high" | "medium" | "low";
+    priority: "HIGH" | "MEDIUM" | "LOW";
 }

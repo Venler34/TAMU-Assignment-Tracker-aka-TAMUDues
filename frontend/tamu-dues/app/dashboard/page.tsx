@@ -11,6 +11,8 @@ import { useRouter } from "next/navigation";
 import AddAssignmentPopup from "@/components/AddAssignmentPopup";
 import EditAssignmentPopup from "@/components/EditAssignmentPopup";
 
+import { AddAssignment, DeleteAssignment } from "@/lib/account";
+
 
 export default function Dashboard() {
     const [name, setName] = useState("Anonymous");
@@ -27,8 +29,10 @@ export default function Dashboard() {
 
     const handleAddAssignment = () => setShowAddPopup(true);
 
-    const handleSaveAssignment = (newAssignment: Assignment) => {
-        setAssignments([...assignments, newAssignment]);
+    const handleSaveAssignment = async (newAssignment: Assignment) => {
+        // Send API Request to save assignment
+        const assignment = await AddAssignment(newAssignment); // Error Handling?
+        setAssignments([...assignments, assignment]);
     };
 
     const handleEdit = (assignment: Assignment) => {
@@ -38,12 +42,13 @@ export default function Dashboard() {
 
     const handleDelete = (id: string) => {
         setAssignments(assignments.filter(a => a.id !== id));
+        DeleteAssignment(id);
         handleClosePopup();
     };
 
     const handleToggleComplete = (id: string) => {
         setAssignments(assignments.map(a =>
-        a.id === id ? { ...a, status: a.status === "complete" ? "incomplete" : "complete" } : a
+        a.id === id ? { ...a, status: a.status === "COMPLETE" ? "INCOMPLETE" : "COMPLETE" } : a
         ));
     };
 

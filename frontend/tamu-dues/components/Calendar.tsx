@@ -52,7 +52,7 @@ export default function Calendar({ assignments, onAssignmentClick, onAddAssignme
             {day && assignments
               .filter(a => new Date(a.dueDate).getDate() === day)
               .map(a => (
-                <button
+                <button 
                   key={a.id}
                   onClick={() => onAssignmentClick(a)}
                   className="block bg-green-400 text-xs mt-1 w-full rounded"
