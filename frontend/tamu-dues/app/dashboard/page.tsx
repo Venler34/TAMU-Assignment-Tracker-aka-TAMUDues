@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import AddAssignmentPopup from "@/components/AddAssignmentPopup";
 import EditAssignmentPopup from "@/components/EditAssignmentPopup";
 
-import { AddAssignment, DeleteAssignment } from "@/lib/account";
+import { AddAssignment, DeleteAssignment, EditAssignment } from "@/lib/account";
 
 
 export default function Dashboard() {
@@ -39,6 +39,13 @@ export default function Dashboard() {
         setSelectedAssignment(assignment);
         setShowEditPopup(true);
     };
+
+    const handleSaveUpdatedAssignment = async (assignment: Assignment) => {
+        const updatedAssignment = await EditAssignment(assignment); // Error Handling?
+        const withoutOldAssignment = assignments.filter(a => a.id !== assignment.id);
+        setAssignments([...withoutOldAssignment, updatedAssignment]);
+        setSelectedAssignment(updatedAssignment);
+    }
 
     const handleDelete = (id: string) => {
         setAssignments(assignments.filter(a => a.id !== id));
@@ -73,15 +80,6 @@ export default function Dashboard() {
             setName(data.username);
             setAssignments(data.assignments);
         };
-        // const assignment: Assignment = { For Testing Assignment
-        //     id: "1",
-        //     name: "Differential Equations",
-        //     dueDate: "10-8-2025",
-        //     description: "HW",
-        //     priority: "high",
-        //     status: "complete"
-        // };
-        // setSelectedAssignment(assignment)
         
         fetchData();
     }, [])
@@ -123,7 +121,7 @@ export default function Dashboard() {
             <EditAssignmentPopup
                 assignment={selectedAssignment}
                 onClose={() => setShowEditPopup(false)}
-                onSave={handleSaveAssignment}
+                onSave={handleSaveUpdatedAssignment}
             />
             )}
         

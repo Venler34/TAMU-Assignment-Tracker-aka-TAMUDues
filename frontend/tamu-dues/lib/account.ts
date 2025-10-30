@@ -64,7 +64,25 @@ export async function DeleteAssignment(assignmentId: String) {
             },
         });
 
-        return res.ok; // assignmnet successfully created
+        return res.ok; // assignment successfully created
+    } catch (error) {
+        return false;
+    }
+}
+
+export async function EditAssignment(assignment: Assignment) {
+    try {
+        const res = await fetch(`${apiBase}/v1/users/assignments/${assignment.id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+            },
+            body: JSON.stringify(assignment)
+        });
+
+        const returnedAssignment = res.json();
+        return returnedAssignment; // assignment updated successfully
     } catch (error) {
         return false;
     }
