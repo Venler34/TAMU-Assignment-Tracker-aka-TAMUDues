@@ -51,7 +51,7 @@ export default function AddAssignmentPopup({ onClose, onAdd }: AddAssignmentPopu
             type="datetime-local"
             value={dueDate}
             onChange={e => setDueDate(e.target.value)}
-            className="w-full text-black p-1 rounded mt-1"
+            className="border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </label>
 

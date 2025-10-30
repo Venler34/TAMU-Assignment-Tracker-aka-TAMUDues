@@ -16,7 +16,7 @@ export default function EditAssignmentPopup({
   const [name, setName] = useState(assignment.name);
   const [dueDate, setDueDate] = useState(assignment.dueDate);
   const [description, setDescription] = useState(assignment.description || "");
-  const [priority, setPriority] = useState<"high" | "medium" | "low">(assignment.priority);
+  const [priority, setPriority] = useState<"HIGH" | "MEDIUM" | "LOW">(assignment.priority);
 
   useEffect(() => {
     setName(assignment.name);
@@ -59,7 +59,7 @@ export default function EditAssignmentPopup({
         <label className="block mb-2">
           Due Date:
           <input
-            type="date"
+            type="datetime-local"
             value={dueDate}
             onChange={e => setDueDate(e.target.value)}
             className="w-full text-black p-1 rounded mt-1"
@@ -79,12 +79,12 @@ export default function EditAssignmentPopup({
           Priority:
           <select
             value={priority}
-            onChange={e => setPriority(e.target.value as "high" | "medium" | "low")}
+            onChange={e => setPriority(e.target.value as "HIGH" | "MEDIUM" | "LOW")}
             className="w-full text-black p-1 rounded mt-1"
           >
-            <option value="high">High</option>
-            <option value="medium">Medium</option>
-            <option value="low">Low</option>
+            <option value="HIGH">High</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="LOW">Low</option>
           </select>
         </label>
 
