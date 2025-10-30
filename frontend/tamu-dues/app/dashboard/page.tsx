@@ -8,17 +8,33 @@ import AssignmentPopup from "@/components/AssignmentPopup";
 import { Assignment } from "@/types/assignment";
 import { useRouter } from "next/navigation";
 
+import AddAssignmentPopup from "@/components/AddAssignmentPopup";
+import EditAssignmentPopup from "@/components/EditAssignmentPopup";
+
 
 export default function Dashboard() {
     const [name, setName] = useState("Anonymous");
     const router = useRouter();
 
+    const [showAddPopup, setShowAddPopup] = useState(false);
+    const [showEditPopup, setShowEditPopup] = useState(false);
 
     const [assignments, setAssignments] = useState<Assignment[]>([]);
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | undefined>();
 
     const handleAssignmentClick = (assignment: Assignment) => setSelectedAssignment(assignment);
     const handleClosePopup = () => setSelectedAssignment(undefined);
+
+    const handleAddAssignment = () => setShowAddPopup(true);
+
+    const handleSaveAssignment = (newAssignment: Assignment) => {
+        setAssignments([...assignments, newAssignment]);
+    };
+
+    const handleEdit = (assignment: Assignment) => {
+        setSelectedAssignment(assignment);
+        setShowEditPopup(true);
+    };
 
     const handleDelete = (id: string) => {
         setAssignments(assignments.filter(a => a.id !== id));
@@ -31,13 +47,6 @@ export default function Dashboard() {
         ));
     };
 
-    const handleEdit = (assignment: Assignment) => {
-        // Implement edit popup or inline form here
-    };
-
-    const handleAddAssignment = () => {
-        // Open "new assignment" popup
-    };
 
     const signout = () => {
         localStorage.removeItem("authToken");
@@ -97,6 +106,22 @@ export default function Dashboard() {
             onDelete={handleDelete}
             onToggleComplete={handleToggleComplete}
         />
+        {
+            showAddPopup && (
+            <AddAssignmentPopup
+                onClose={() => setShowAddPopup(false)}
+                onAdd={handleSaveAssignment}
+            />)
+        }
+
+        {showEditPopup && selectedAssignment && (
+            <EditAssignmentPopup
+                assignment={selectedAssignment}
+                onClose={() => setShowEditPopup(false)}
+                onSave={handleSaveAssignment}
+            />
+            )}
+        
         </div>
     );
 }
