@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import {SignIn} from "@/app/lib/account";
+import {SignIn} from "@/lib/account";
 
 interface SignInDropdownProps {
   onRegisterClick: () => void;

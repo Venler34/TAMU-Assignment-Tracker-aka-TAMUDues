@@ -10,6 +10,8 @@ CREATE TABLE TAMUDues.Assignments (
     description TEXT,
     `dueDate` timestamp, # includes timezone
     userId int, 
+    `status` ENUM('complete', 'incomplete') NOT NULL DEFAULT 'incomplete',
+    `priority` ENUM('high', 'medium', 'low'),
     
 	CONSTRAINT fk_assignments_users
 	FOREIGN KEY (userId) REFERENCES TAMUDues.Users (id)

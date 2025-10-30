@@ -17,3 +17,6 @@ Refactor so uses service layer for assignments and users
 - Afterword should implement JWT service more modular and utilize user service as well
 - Once we implement this we should be able to log in (the rest should then be frontend design which can be vibecoded)
 
+
+Future Considerations
+- Logic for enforcing unique usernames

@@ -39,6 +39,10 @@ public class AssignmentService {
                         existingAssignment.setDescription(updatedAssignment.getDescription());
                     if (updatedAssignment.getDueDate() != null)
                         existingAssignment.setDueDate(updatedAssignment.getDueDate());
+                    if (updatedAssignment.getStatus() != null)
+                        existingAssignment.setStatus(updatedAssignment.getStatus());
+                    if (updatedAssignment.getPriority() != null)
+                        existingAssignment.setPriority(updatedAssignment.getPriority());
 
                     return assignmentRepo.save(existingAssignment);
                 })

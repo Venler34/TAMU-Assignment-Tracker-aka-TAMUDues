@@ -12,6 +12,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import com.venler42.tamu_dues_api.enums.*;
+
 @Entity
 @Table(name = "Assignments", schema = "TAMUDues")
 public class Assignment {
@@ -22,6 +24,8 @@ public class Assignment {
     private String name;
     private String description;
     private LocalDateTime dueDate;
+    private Status status;
+    private Priority priority;
 
     @ManyToOne()
     @JoinColumn(name = "userId", nullable = false) // based on sql
@@ -59,6 +63,22 @@ public class Assignment {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
     }
 
     public Integer getId() { // need getter so it gets returned

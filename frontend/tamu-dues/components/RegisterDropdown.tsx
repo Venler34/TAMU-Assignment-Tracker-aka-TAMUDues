@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import {SignIn, Register} from "@/app/lib/account";
+import {SignIn, Register} from "@/lib/account";
 import { useRouter } from "next/navigation";
 
 interface RegisterDropdownProps {
