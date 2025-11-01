@@ -45,7 +45,7 @@ export default function Calendar({ assignments, onAssignmentClick, onAddAssignme
       <div className="flex justify-between items-center mb-3">
         <div className="flex gap-2">
           <button onClick={() => handleMonthChange(-1)}>◀</button>
-          <span className="text-lg font-semibold">
+          <span className="text-lg font-semibold w-40 text-center">
             {currentDate.toLocaleString("default", { month: "long" })} {currentDate.getFullYear()}
           </span>
           <button onClick={() => handleMonthChange(1)}>▶</button>
