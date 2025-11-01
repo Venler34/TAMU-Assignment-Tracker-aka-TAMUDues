@@ -29,10 +29,10 @@ export default function AssignmentPopup({
 
         <div className="flex justify-between mt-4">
           <button
-            onClick={() => onToggleComplete(assignment.id)}
+            onClick={() => onToggleComplete(assignment.id!)}
             className="bg-green-700 px-3 py-1 rounded"
           >
-            {assignment.status === "complete" ? "Mark Incomplete" : "Complete"}
+            {assignment.status === "COMPLETE" ? "Mark Incomplete" : "Complete"}
           </button>
           <button
             onClick={() => onEdit(assignment)}
@@ -41,7 +41,7 @@ export default function AssignmentPopup({
             Edit
           </button>
           <button
-            onClick={() => onDelete(assignment.id)}
+            onClick={() => onDelete(assignment.id!)}
             className="bg-red-500 px-3 py-1 rounded"
           >
             Delete
