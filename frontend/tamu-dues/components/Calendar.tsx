@@ -25,6 +25,13 @@ export default function Calendar({ assignments, onAssignmentClick, onAddAssignme
     i < startDay ? null : i - startDay + 1
   );
 
+  const shouldShowAssignment = (assignmentDueDate: string, day: number) => {
+    const dueDate = new Date(assignmentDueDate);
+    return dueDate.getDate() === day && 
+           dueDate.getMonth() == currentDate.getMonth() &&
+           dueDate.getFullYear() == currentDate.getFullYear()
+  }
+
   return (
     <div className="bg-green-600 text-white p-4 rounded-lg flex-1">
       <div className="flex justify-between items-center mb-3">
@@ -50,7 +57,7 @@ export default function Calendar({ assignments, onAssignmentClick, onAddAssignme
           >
             {day && <span className="text-sm font-semibold">{day}</span>}
             {day && assignments
-              .filter(a => new Date(a.dueDate).getDate() === day)
+              .filter(a => shouldShowAssignment(a.dueDate, day))
               .map(a => (
                 <button 
                   key={a.id}
