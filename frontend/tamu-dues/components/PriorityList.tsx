@@ -41,7 +41,7 @@ export default function PriorityList({ assignments, onAssignmentClick }: Priorit
   return (
     <div className="bg-green-700 text-white p-4 rounded-lg w-1/4">
       <h2 className="text-xl mb-3 text-center">Prioritize</h2>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 overflow-y-auto">
         {assignments.filter(a => a.status === "INCOMPLETE").sort(compareAssignments).map(a => (
           <button
             key={a.id}
