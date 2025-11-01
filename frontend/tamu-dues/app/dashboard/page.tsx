@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import AddAssignmentPopup from "@/components/AddAssignmentPopup";
 import EditAssignmentPopup from "@/components/EditAssignmentPopup";
 
-import { AddAssignment, DeleteAssignment, EditAssignment } from "@/lib/account";
+import { AddAssignment, DeleteAssignment, EditAssignment, UpdateAssignmentStatus } from "@/lib/account";
 
 
 export default function Dashboard() {
@@ -53,10 +53,14 @@ export default function Dashboard() {
         handleClosePopup();
     };
 
-    const handleToggleComplete = (id: string) => {
+    const handleToggleComplete = (id: string, currStatus: string) => {
+        UpdateAssignmentStatus(id, currStatus);
+        
         setAssignments(assignments.map(a =>
         a.id === id ? { ...a, status: a.status === "COMPLETE" ? "INCOMPLETE" : "COMPLETE" } : a
         ));
+
+        handleClosePopup(); // so rerenders
     };
 
 

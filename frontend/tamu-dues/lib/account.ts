@@ -87,3 +87,24 @@ export async function EditAssignment(assignment: Assignment) {
         return false;
     }
 }
+
+export async function UpdateAssignmentStatus(assignmentId: String, currStatus: String) {
+
+    const newStatus = (currStatus === "COMPLETE") ? "INCOMPLETE" : "COMPLETE";
+
+    try {
+        const res = await fetch(`${apiBase}/v1/users/assignments/${assignmentId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+            },
+            body: JSON.stringify({ "status": newStatus })
+        });
+
+        const returnedAssignment = res.json();
+        return returnedAssignment; // assignment updated successfully
+    } catch (error) {
+        return false;
+    }
+}

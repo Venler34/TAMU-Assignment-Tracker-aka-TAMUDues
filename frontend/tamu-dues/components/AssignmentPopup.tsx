@@ -6,7 +6,7 @@ interface PopupProps {
   onClose: () => void;
   onEdit: (assignment: Assignment) => void;
   onDelete: (id: string) => void;
-  onToggleComplete: (id: string) => void;
+  onToggleComplete: (id: string, currStatus: string) => void;
 }
 
 export default function AssignmentPopup({
@@ -29,7 +29,7 @@ export default function AssignmentPopup({
 
         <div className="flex justify-between mt-4">
           <button
-            onClick={() => onToggleComplete(assignment.id!)}
+            onClick={() => onToggleComplete(assignment.id!, assignment.status)}
             className="bg-green-700 px-3 py-1 rounded"
           >
             {assignment.status === "COMPLETE" ? "Mark Incomplete" : "Complete"}
