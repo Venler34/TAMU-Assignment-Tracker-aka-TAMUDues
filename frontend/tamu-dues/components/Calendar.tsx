@@ -11,6 +11,14 @@ interface CalendarProps {
 export default function Calendar({ assignments, onAssignmentClick, onAddAssignment }: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
 
+  const getColor = (a: Assignment) => {
+    let opacity = (a.status == "COMPLETE") ? "opacity-50" : "";
+    let priorityColor = "bg-green-300";
+    if (a.priority === "HIGH") priorityColor = "bg-red-400";
+    if (a.priority === "MEDIUM") priorityColor = "bg-yellow-300";
+    return priorityColor + " " + opacity;
+  };
+
   const handleMonthChange = (offset: number) => {
     const newDate = new Date(currentDate);
     newDate.setMonth(currentDate.getMonth() + offset);
@@ -53,7 +61,7 @@ export default function Calendar({ assignments, onAssignmentClick, onAddAssignme
         {days.map((day, i) => (
           <div
             key={i}
-            className="bg-gray-100 text-black h-16 rounded p-1 relative"
+            className="bg-gray-100 text-black h-16 rounded p-1 relative overflow-y-auto"
           >
             {day && <span className="text-sm font-semibold">{day}</span>}
             {day && assignments
@@ -62,7 +70,7 @@ export default function Calendar({ assignments, onAssignmentClick, onAddAssignme
                 <button 
                   key={a.id}
                   onClick={() => onAssignmentClick(a)}
-                  className="block bg-green-400 text-xs mt-1 w-full rounded"
+                  className={`block ${getColor(a)} text-xs mt-1 w-full rounded overflow-hidden h-4`}
                 >
                   {a.name}
                 </button>

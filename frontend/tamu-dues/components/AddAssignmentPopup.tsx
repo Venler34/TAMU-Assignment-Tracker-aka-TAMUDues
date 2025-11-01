@@ -46,7 +46,7 @@ export default function AddAssignmentPopup({ onClose, onAdd }: AddAssignmentPopu
         </label>
 
         <label className="block mb-2">
-          Due Date:
+          Due Date:&nbsp;
           <input
             type="datetime-local"
             value={dueDate}
