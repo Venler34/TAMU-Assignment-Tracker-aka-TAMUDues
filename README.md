@@ -18,6 +18,7 @@ Allows students to manage due dates between assignments
 Separated Java Spring Backend into multiple layers to avoid sending requests between APIs and reducing repeated code  
 Java Spring API is RESTFUL implementing CRUD operations  
 JWT Tokens are implemented because they are compact, URL-safe easy to add authentication header and use them to find out what users are logged in + no need to store state on server side
+Built Docker Image for Java Microservice to allow for consistent behavior if ever deployed
 
 # 🚀 Inspiration
 
