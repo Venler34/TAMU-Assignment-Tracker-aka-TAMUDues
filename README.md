@@ -1,22 +1,31 @@
-# TAMUDues
-Collects due dates from Canvas so TAMU students know what to prioritize. 
+<img src="./images/Home.png" width=460>
+<img src="./images/Dashboard.png" width=460>
+<img src="./images/Assignment.png" width=460>
+<img src="./images/Edit.png" width=460>
 
+# ⏳ TAMUDues (Currently Under Works)
+Allows students to manage due dates between assignments  
 
-Refactor so uses service layer for assignments and users
-- Don't want to send multiple http requests between layers bad design so JWT tokens can extract assignments
+# 🎯 Features
 
-- User Service (logic with users) (finding users / creating users / updating users) (no http requests)
-- userServiceAPI - findAll(), registerUser(), getUserById()
+- Create accounts
+- Add assignments
+- Modify assignments
+- Find out what to prioritize  
 
-- Assignment Service (logic with assignmnets)
+# 📝 Design Choices
 
-- then route through assignment and user service - cause otherwise would have to send http requests between
-- layers to actually get information. More modular and better.
+Separated Java Spring Backend into multiple layers to avoid sending requests between APIs and reducing repeated code  
+Java Spring API is RESTFUL implementing CRUD operations  
+JWT Tokens are implemented because they are compact, URL-safe easy to add authentication header and use them to find out what users are logged in + no need to store state on server side
 
-- Service repo needs to be designed <= 
-- Afterword should implement JWT service more modular and utilize user service as well
-- Once we implement this we should be able to log in (the rest should then be frontend design which can be vibecoded)
+# 🚀 Inspiration
 
+I simply wanted to learn and work with Java Spring since it's a popular backend framework. Additionally I wanted to practice system design when it comes to
+designing scalable systems. Since I needed a project to work with I decided to make a due date tracker since sometimes it's hard to keep track of that during school.
+I often like to focus on one task at a time, and I felt this would be a good way for me to do that.  
 
-Future Considerations
+# 💡 Considerations
 - Logic for enforcing unique usernames
+- Add Google Authentication so users don't have to memorize a new account credentials
+- Get feedback on design
